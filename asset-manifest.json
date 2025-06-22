@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/india-growth-dashboard/static/css/main.f855e6bc.css",
-    "main.js": "/india-growth-dashboard/static/js/main.e57d4ae6.js",
+    "main.js": "/india-growth-dashboard/static/js/main.87996062.js",
     "static/js/453.8151fe76.chunk.js": "/india-growth-dashboard/static/js/453.8151fe76.chunk.js",
     "index.html": "/india-growth-dashboard/index.html",
     "main.f855e6bc.css.map": "/india-growth-dashboard/static/css/main.f855e6bc.css.map",
-    "main.e57d4ae6.js.map": "/india-growth-dashboard/static/js/main.e57d4ae6.js.map",
+    "main.87996062.js.map": "/india-growth-dashboard/static/js/main.87996062.js.map",
     "453.8151fe76.chunk.js.map": "/india-growth-dashboard/static/js/453.8151fe76.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f855e6bc.css",
-    "static/js/main.e57d4ae6.js"
+    "static/js/main.87996062.js"
   ]
 }
