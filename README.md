@@ -5,9 +5,9 @@
 🔗 **[View Live Demo](https://sumitksinghdev.github.io/india-growth-dashboard/)**
 
 ## 📸 Screenshots
-![Dashboard Overview](./demo-images/dashboard-overview.png)
-![AI-Powered Anomaly Detection](./demo-images/ai-powered-anomaly-detection.png)
-![Cities Comparison](./demo-images/cities-comparison.png)
+![Dashboard Overview](./demo-images/dashboard-overview.jpg)
+![AI-Powered Anomaly Detection](./demo-images/ai-powered-anomaly-detection.jpg)
+![Cities Comparison](./demo-images/cities-comparison.jpg)
 
 ## 🛠️ Tech Stack
 - Frontend: React, TypeScript
