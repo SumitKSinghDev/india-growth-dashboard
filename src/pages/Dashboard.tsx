@@ -1,18 +1,60 @@
 import React, { useState } from 'react';
-import { Container, Grid, Paper, Typography } from '@mui/material';
+import { Container, Grid, Paper, Typography, Box, Tabs, Tab } from '@mui/material';
 import CitySelector from '../components/CitySelector';
 import MetricSelector from '../components/MetricSelector';
 import BarChart from '../components/BarChart';
 import LineChart from '../components/LineChart';
 import ScatterPlot from '../components/ScatterPlot';
 import SearchBar from '../components/SearchBar';
+import RankingTable from '../components/RankingTable';
+import InsightsPanel from '../components/InsightsPanel';
+import HeatmapChart from '../components/HeatmapChart';
 import { MetricCategory } from '../data/metrics';
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          {children}
+        </Box>
+      )}
+    </div>
+  );
+}
 
 const Dashboard: React.FC = () => {
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
   const [selectedMetric, setSelectedMetric] = useState<string>('');
+  const [selectedMetrics, setSelectedMetrics] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<MetricCategory | 'All'>('All');
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [tabValue, setTabValue] = useState(0);
+
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setTabValue(newValue);
+  };
+
+  const handleMetricChange = (metricId: string) => {
+    setSelectedMetric(metricId);
+    if (!selectedMetrics.includes(metricId)) {
+      setSelectedMetrics([...selectedMetrics, metricId]);
+    }
+  };
 
   return (
     <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
@@ -34,44 +76,60 @@ const Dashboard: React.FC = () => {
           <MetricSelector
             selectedMetric={selectedMetric}
             selectedCategory={selectedCategory}
-            onMetricChange={setSelectedMetric}
+            onMetricChange={handleMetricChange}
             onCategoryChange={setSelectedCategory}
             searchTerm={searchTerm}
           />
         </Grid>
         
+        {/* Insights Panel */}
         <Grid item xs={12}>
-          <Paper elevation={3} sx={{ p: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              City Comparison
-            </Typography>
-            <BarChart
-              selectedCities={selectedCities}
-              selectedMetric={selectedMetric}
-            />
-          </Paper>
+          <InsightsPanel />
         </Grid>
 
+        {/* Main Content Tabs */}
         <Grid item xs={12}>
-          <Paper elevation={3} sx={{ p: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              Time Series Analysis
-            </Typography>
-            <LineChart
-              selectedCities={selectedCities}
-              selectedMetric={selectedMetric}
-            />
-          </Paper>
-        </Grid>
+          <Paper elevation={3}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <Tabs value={tabValue} onChange={handleTabChange} aria-label="dashboard tabs">
+                <Tab label="City Comparison" />
+                <Tab label="Time Series Analysis" />
+                <Tab label="Rankings" />
+                <Tab label="Regional Heatmap" />
+                <Tab label="Correlation Analysis" />
+              </Tabs>
+            </Box>
 
-        <Grid item xs={12}>
-          <Paper elevation={3} sx={{ p: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              Metric Correlation Analysis
-            </Typography>
-            <ScatterPlot
-              selectedCities={selectedCities}
-            />
+            <TabPanel value={tabValue} index={0}>
+              <BarChart
+                selectedCities={selectedCities}
+                selectedMetric={selectedMetric}
+              />
+            </TabPanel>
+
+            <TabPanel value={tabValue} index={1}>
+              <LineChart
+                selectedCities={selectedCities}
+                selectedMetric={selectedMetric}
+              />
+            </TabPanel>
+
+            <TabPanel value={tabValue} index={2}>
+              <RankingTable selectedMetric={selectedMetric} />
+            </TabPanel>
+
+            <TabPanel value={tabValue} index={3}>
+              <HeatmapChart
+                selectedCities={selectedCities}
+                selectedMetrics={selectedMetrics}
+              />
+            </TabPanel>
+
+            <TabPanel value={tabValue} index={4}>
+              <ScatterPlot
+                selectedCities={selectedCities}
+              />
+            </TabPanel>
           </Paper>
         </Grid>
       </Grid>

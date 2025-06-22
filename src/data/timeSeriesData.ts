@@ -13,7 +13,7 @@ export interface CityTimeSeriesData {
 }
 
 const generateTimeSeriesData = (): CityTimeSeriesData[] => {
-  const years = [2019, 2020, 2021, 2022, 2023];
+  const years = [2019, 2020, 2021, 2022, 2023]; // 5-year span
   const timeSeriesData: CityTimeSeriesData[] = [];
 
   CITIES.forEach(city => {
@@ -30,6 +30,9 @@ const generateTimeSeriesData = (): CityTimeSeriesData[] => {
         case 'gni':
           baseValue = 350000; // INR Crores
           break;
+        case 'gdp_per_capita':
+          baseValue = 80000; // INR
+          break;
         case 'unemployment':
           baseValue = 7; // %
           break;
@@ -39,10 +42,7 @@ const generateTimeSeriesData = (): CityTimeSeriesData[] => {
         case 'fdi':
           baseValue = 75000; // INR Crores
           break;
-        case 'gdp_growth':
-          baseValue = 6; // %
-          break;
-        case 'investment_ratio':
+        case 'trade_ratio':
           baseValue = 1.0; // Ratio
           break;
         case 'public_debt':
@@ -56,17 +56,17 @@ const generateTimeSeriesData = (): CityTimeSeriesData[] => {
         case 'life_expectancy':
           baseValue = 70; // Years
           break;
+        case 'infant_mortality':
+          baseValue = 30; // per 1000 births
+          break;
         case 'literacy':
           baseValue = 80; // %
-          break;
-        case 'gender_inequality':
-          baseValue = 0.4; // Index (0-1)
           break;
         case 'education_index':
           baseValue = 0.6; // Index (0-1)
           break;
-        case 'poverty_rate':
-          baseValue = 15; // %
+        case 'gender_inequality':
+          baseValue = 0.4; // Index (0-1)
           break;
         case 'population_growth':
           baseValue = 2; // %
@@ -85,28 +85,25 @@ const generateTimeSeriesData = (): CityTimeSeriesData[] => {
         case 'hospital_beds':
           baseValue = 2.0; // per 1000 people
           break;
-        case 'maternal_mortality':
-          baseValue = 80; // %
+        case 'clean_water':
+          baseValue = 85; // %
           break;
         case 'vaccination':
           baseValue = 75; // %
           break;
 
         // Environment & Sustainability
-        case 'forest_area':
-          baseValue = 25; // % of land area
-          break;
         case 'co2_emissions':
           baseValue = 2.5; // tons per capita
           break;
         case 'renewable_energy':
           baseValue = 15; // %
           break;
+        case 'forest_area':
+          baseValue = 25; // %
+          break;
         case 'air_quality':
           baseValue = 100; // Index
-          break;
-        case 'water_quality':
-          baseValue = 70; // Index (0-100)
           break;
         case 'environmental_performance':
           baseValue = 50; // Index (0-100)
@@ -119,11 +116,11 @@ const generateTimeSeriesData = (): CityTimeSeriesData[] => {
         case 'internet_penetration':
           baseValue = 60; // %
           break;
-        case 'road_quality':
-          baseValue = 4.0; // Index (1-7)
+        case 'mobile_subscriptions':
+          baseValue = 80; // per 100 people
           break;
-        case 'electricity_access':
-          baseValue = 90; // %
+        case 'infrastructure_quality':
+          baseValue = 4.0; // Index (1-7)
           break;
         case 'political_stability':
           baseValue = 0; // Index (-2.5 to 2.5)
@@ -133,11 +130,11 @@ const generateTimeSeriesData = (): CityTimeSeriesData[] => {
         case 'gini_coefficient':
           baseValue = 0.4; // Index (0-1)
           break;
-        case 'income_inequality':
-          baseValue = 0.5; // Index (0-1)
+        case 'poverty_rate':
+          baseValue = 15; // %
           break;
-        case 'poverty_gap':
-          baseValue = 10; // %
+        case 'social_protection':
+          baseValue = 50; // %
           break;
 
         default:
@@ -172,8 +169,30 @@ const generateTimeSeriesData = (): CityTimeSeriesData[] => {
             case 'healthcare_expenditure':
               yearFactor = 1.2; // 20% increase
               break;
+            case 'vaccination':
+              yearFactor = 0.8; // 20% decrease initially
+              break;
             default:
               yearFactor = 1;
+          }
+        }
+
+        // Recovery in 2021-2023
+        if (year >= 2021) {
+          switch (metric.id) {
+            case 'gdp':
+            case 'gni':
+            case 'fdi':
+              yearFactor = 1 + (index - 1) * 0.08; // Strong recovery
+              break;
+            case 'unemployment':
+              yearFactor = 1.3 - (index - 1) * 0.05; // Gradual recovery
+              break;
+            case 'vaccination':
+              yearFactor = 0.8 + (index - 1) * 0.1; // Vaccination drive
+              break;
+            default:
+              yearFactor = 1 + (index - 1) * 0.03; // Steady growth
           }
         }
 
