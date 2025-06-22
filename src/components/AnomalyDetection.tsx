@@ -11,13 +11,10 @@ import {
   Chip,
   Grid,
   Card,
-  CardContent,
-  Divider
+  CardContent
 } from '@mui/material';
 import {
   Warning,
-  TrendingUp,
-  TrendingDown,
   CheckCircle,
   Error
 } from '@mui/icons-material';
@@ -138,15 +135,6 @@ const AnomalyDetection: React.FC<AnomalyDetectionProps> = () => {
       case 'medium': return <Warning color="warning" />;
       case 'low': return <CheckCircle color="info" />;
       default: return <CheckCircle />;
-    }
-  };
-
-  const getAnomalyTypeIcon = (type: string) => {
-    switch (type) {
-      case 'outlier': return <TrendingUp />;
-      case 'trend': return <TrendingDown />;
-      case 'performance': return <Warning />;
-      default: return <Warning />;
     }
   };
 

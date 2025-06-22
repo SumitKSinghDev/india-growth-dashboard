@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Grid, Paper, Typography, Box, Tabs, Tab, useTheme } from '@mui/material';
-import { TrendingUp, Assessment, Timeline, Map, BubbleChart, Psychology, GetApp, Lightbulb, Science } from '@mui/icons-material';
+import { TrendingUp, Assessment, Timeline, Map, BubbleChart, Psychology, GetApp, Lightbulb } from '@mui/icons-material';
 import CitySelector from '../components/CitySelector';
 import MetricSelector from '../components/MetricSelector';
 import BarChart from '../components/BarChart';
