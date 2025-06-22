@@ -13,7 +13,6 @@ import {
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { TIME_SERIES_DATA } from '../data/timeSeriesData';
 import { CITIES } from '../data/mockData';
-import { METRICS } from '../data/metrics';
 
 interface TrendPredictionProps {
   selectedCities: string[];

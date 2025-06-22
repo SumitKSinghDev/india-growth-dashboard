@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Paper,
   Typography,
   List,
   ListItem,
@@ -12,12 +11,9 @@ import {
   useTheme
 } from '@mui/material';
 import {
-  TrendingUp,
-  TrendingDown,
   LocalHospital,
   Nature,
   School,
-  AttachMoney,
   Warning,
   Star,
   EmojiEvents,

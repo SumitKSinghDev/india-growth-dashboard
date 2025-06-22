@@ -1,8 +1,6 @@
 import React from 'react';
 import { Paper, TextField, InputAdornment, Box, useTheme } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { METRICS } from '../data/metrics';
-import { CITIES } from '../data/mockData';
 
 interface SearchBarProps {
   onSearch: (searchTerm: string) => void;

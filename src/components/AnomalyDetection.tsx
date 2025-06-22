@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Paper,
   Typography,
@@ -35,20 +35,23 @@ interface Anomaly {
   description: string;
 }
 
-const AnomalyDetection: React.FC = () => {
+interface AnomalyDetectionProps {}
+
+const AnomalyDetection: React.FC<AnomalyDetectionProps> = () => {
   const [anomalies, setAnomalies] = useState<Anomaly[]>([]);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(true);
 
   // Calculate z-score for outlier detection
   const calculateZScore = (value: number, values: number[]) => {
     const mean = values.reduce((sum, val) => sum + val, 0) / values.length;
     const variance = values.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / values.length;
     const stdDev = Math.sqrt(variance);
-    return stdDev === 0 ? 0 : (value - mean) / stdDev;
+    if (stdDev === 0) return 0;
+    return (value - mean) / stdDev;
   };
 
   // Detect anomalies using statistical methods
-  const detectAnomalies = () => {
+  const detectAnomalies = useCallback(() => {
     setIsAnalyzing(true);
     const detectedAnomalies: Anomaly[] = [];
 
@@ -123,20 +126,11 @@ const AnomalyDetection: React.FC = () => {
 
     setAnomalies(detectedAnomalies);
     setIsAnalyzing(false);
-  };
+  }, []);
 
   useEffect(() => {
     detectAnomalies();
-  }, []);
-
-  const getSeverityColor = (severity: string) => {
-    switch (severity) {
-      case 'high': return 'error';
-      case 'medium': return 'warning';
-      case 'low': return 'info';
-      default: return 'default';
-    }
-  };
+  }, [detectAnomalies]);
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {

@@ -110,38 +110,13 @@ const ExportCapabilities: React.FC<ExportCapabilitiesProps> = ({
     setTimeout(() => {
       setIsExporting(false);
       setMessage('Image export would be implemented with html2canvas library');
-      setTimeout(() => setMessage(''), 3000);
+      setTimeout(() => setMessage(''), 2000);
     }, 2000);
   };
 
   // Generate comprehensive report
   const generateComprehensiveReport = () => {
     setIsExporting(true);
-    
-    const reportData = {
-      title: reportTitle,
-      generatedAt: new Date().toISOString(),
-      cities: selectedCities.map(cityId => {
-        const cityInfo = CITIES.find(c => c.cityId === cityId);
-        return cityInfo ? `${cityInfo.name}, ${cityInfo.state}` : cityId;
-      }),
-      metrics: selectedMetrics.map(metricId => {
-        const metric = METRICS.find(m => m.id === metricId);
-        return metric ? metric.name : metricId;
-      }),
-      data: selectedCities.map(cityId => {
-        const cityInfo = CITIES.find(c => c.cityId === cityId);
-        const cityData = MOCK_DATA.find(d => d.cityId === cityId);
-        return {
-          city: cityInfo?.name || cityId,
-          state: cityInfo?.state || '',
-          metrics: selectedMetrics.reduce((acc, metricId) => {
-            acc[metricId] = cityData?.metrics[metricId] || 0;
-            return acc;
-          }, {} as { [key: string]: number })
-        };
-      })
-    };
     
     // Simulate comprehensive report generation
     setTimeout(() => {

@@ -13,12 +13,10 @@ import {
   Chip,
   Accordion,
   AccordionSummary,
-  AccordionDetails,
-  Button
+  AccordionDetails
 } from '@mui/material';
 import {
   TrendingUp,
-  TrendingDown,
   Lightbulb,
   School,
   LocalHospital,
@@ -29,7 +27,6 @@ import {
 } from '@mui/icons-material';
 import { MOCK_DATA } from '../data/mockData';
 import { CITIES } from '../data/mockData';
-import { METRICS } from '../data/metrics';
 
 interface PolicyInsight {
   cityId: string;
@@ -181,15 +178,6 @@ const PolicyInsights: React.FC = () => {
     };
 
     setCityClusters(clusters);
-  };
-
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'high': return 'error';
-      case 'medium': return 'warning';
-      case 'low': return 'info';
-      default: return 'default';
-    }
   };
 
   const getCategoryIcon = (category: string) => {

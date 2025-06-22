@@ -12,24 +12,9 @@ import {
   Select,
   MenuItem,
   Chip,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  LinearProgress,
-  Alert
+  LinearProgress
 } from '@mui/material';
-import {
-  TrendingUp,
-  Group,
-  Psychology,
-  Flag,
-  CheckCircle,
-  Warning
-} from '@mui/icons-material';
-import { MOCK_DATA } from '../data/mockData';
 import { CITIES } from '../data/mockData';
-import { METRICS } from '../data/metrics';
 
 interface CityCluster {
   name: string;
@@ -55,7 +40,7 @@ interface SDGGoal {
 const AdvancedInteractions: React.FC = () => {
   const [cityClusters, setCityClusters] = useState<CityCluster[]>([]);
   const [selectedScenario, setSelectedScenario] = useState<string>('');
-  const [scenarioImpact, setScenarioImpact] = useState<{ [cityId: string]: { [metricId: string]: number } }>({});
+  const [, setScenarioImpact] = useState<{ [cityId: string]: { [metricId: string]: number } }>({});
   const [sdgGoals, setSdgGoals] = useState<SDGGoal[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 

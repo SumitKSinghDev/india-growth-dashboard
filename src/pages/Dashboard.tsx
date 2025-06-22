@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Grid, Paper, Typography, Box, Tabs, Tab, useTheme } from '@mui/material';
-import { TrendingUp, Analytics, Assessment, Timeline, Map, BubbleChart, Psychology, GetApp, Lightbulb, Science } from '@mui/icons-material';
+import { TrendingUp, Assessment, Timeline, Map, BubbleChart, Psychology, GetApp, Lightbulb, Science } from '@mui/icons-material';
 import CitySelector from '../components/CitySelector';
 import MetricSelector from '../components/MetricSelector';
 import BarChart from '../components/BarChart';
@@ -14,7 +14,6 @@ import TrendPrediction from '../components/TrendPrediction';
 import AnomalyDetection from '../components/AnomalyDetection';
 import ExportCapabilities from '../components/ExportCapabilities';
 import PolicyInsights from '../components/PolicyInsights';
-import AdvancedInteractions from '../components/AdvancedInteractions';
 import { MetricCategory } from '../data/metrics';
 
 interface TabPanelProps {
@@ -72,7 +71,6 @@ const Dashboard: React.FC = () => {
     { label: 'AI Trend Prediction', icon: <Psychology /> },
     { label: 'Export & Reports', icon: <GetApp /> },
     { label: 'Policy Insights', icon: <Lightbulb /> },
-    { label: 'Advanced Analytics', icon: <Science /> },
   ];
 
   return (
@@ -306,10 +304,6 @@ const Dashboard: React.FC = () => {
 
             <TabPanel value={tabValue} index={7}>
               <PolicyInsights />
-            </TabPanel>
-
-            <TabPanel value={tabValue} index={8}>
-              <AdvancedInteractions />
             </TabPanel>
           </Paper>
         </Grid>
