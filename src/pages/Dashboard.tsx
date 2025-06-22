@@ -9,6 +9,11 @@ import SearchBar from '../components/SearchBar';
 import RankingTable from '../components/RankingTable';
 import InsightsPanel from '../components/InsightsPanel';
 import HeatmapChart from '../components/HeatmapChart';
+import TrendPrediction from '../components/TrendPrediction';
+import AnomalyDetection from '../components/AnomalyDetection';
+import ExportCapabilities from '../components/ExportCapabilities';
+import PolicyInsights from '../components/PolicyInsights';
+import AdvancedInteractions from '../components/AdvancedInteractions';
 import { MetricCategory } from '../data/metrics';
 
 interface TabPanelProps {
@@ -87,16 +92,25 @@ const Dashboard: React.FC = () => {
           <InsightsPanel />
         </Grid>
 
+        {/* AI-Powered Analytics */}
+        <Grid item xs={12}>
+          <AnomalyDetection />
+        </Grid>
+
         {/* Main Content Tabs */}
         <Grid item xs={12}>
           <Paper elevation={3}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-              <Tabs value={tabValue} onChange={handleTabChange} aria-label="dashboard tabs">
+              <Tabs value={tabValue} onChange={handleTabChange} aria-label="dashboard tabs" variant="scrollable" scrollButtons="auto">
                 <Tab label="City Comparison" />
                 <Tab label="Time Series Analysis" />
                 <Tab label="Rankings" />
                 <Tab label="Regional Heatmap" />
                 <Tab label="Correlation Analysis" />
+                <Tab label="AI Trend Prediction" />
+                <Tab label="Export & Reports" />
+                <Tab label="Policy Insights" />
+                <Tab label="Advanced Analytics" />
               </Tabs>
             </Box>
 
@@ -129,6 +143,28 @@ const Dashboard: React.FC = () => {
               <ScatterPlot
                 selectedCities={selectedCities}
               />
+            </TabPanel>
+
+            <TabPanel value={tabValue} index={5}>
+              <TrendPrediction
+                selectedCities={selectedCities}
+                selectedMetric={selectedMetric}
+              />
+            </TabPanel>
+
+            <TabPanel value={tabValue} index={6}>
+              <ExportCapabilities
+                selectedCities={selectedCities}
+                selectedMetrics={selectedMetrics}
+              />
+            </TabPanel>
+
+            <TabPanel value={tabValue} index={7}>
+              <PolicyInsights />
+            </TabPanel>
+
+            <TabPanel value={tabValue} index={8}>
+              <AdvancedInteractions />
             </TabPanel>
           </Paper>
         </Grid>
