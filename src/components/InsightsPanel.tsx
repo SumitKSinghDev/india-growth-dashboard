@@ -14,7 +14,7 @@ import {
   TrendingUp,
   TrendingDown,
   LocalHospital,
-  Eco,
+  Nature,
   School,
   AttachMoney,
   Warning
@@ -179,7 +179,7 @@ const InsightsPanel: React.FC = () => {
         <Grid item xs={12} md={6}>
           <Box sx={{ mb: 2 }}>
             <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-              <Eco sx={{ mr: 1 }} />
+              <Nature sx={{ mr: 1 }} />
               Environmental Performance
             </Typography>
             <Box sx={{ mb: 1 }}>
