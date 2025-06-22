@@ -8,7 +8,8 @@ import {
   ListItemIcon,
   Box,
   Chip,
-  Grid
+  Grid,
+  useTheme
 } from '@mui/material';
 import {
   TrendingUp,
@@ -17,12 +18,17 @@ import {
   Nature,
   School,
   AttachMoney,
-  Warning
+  Warning,
+  Star,
+  EmojiEvents,
+  Visibility
 } from '@mui/icons-material';
 import { MOCK_DATA } from '../data/mockData';
 import { CITIES } from '../data/mockData';
 
 const InsightsPanel: React.FC = () => {
+  const theme = useTheme();
+
   // Get top 10 cities by HDI
   const topHDICities = [...MOCK_DATA]
     .map(data => {
@@ -30,7 +36,7 @@ const InsightsPanel: React.FC = () => {
       return {
         cityName: cityInfo ? cityInfo.name : data.cityId,
         state: cityInfo ? cityInfo.state : '',
-        hdi: data.metrics.hdi || 0
+        hdi: data.metrics.humanDevelopmentIndex || 0
       };
     })
     .sort((a, b) => b.hdi - a.hdi)
@@ -43,7 +49,7 @@ const InsightsPanel: React.FC = () => {
       return {
         cityName: cityInfo ? cityInfo.name : data.cityId,
         state: cityInfo ? cityInfo.state : '',
-        gini: data.metrics.gini_coefficient || 0
+        gini: data.metrics.giniCoefficient || 0
       };
     })
     .sort((a, b) => b.gini - a.gini)
@@ -54,9 +60,9 @@ const InsightsPanel: React.FC = () => {
     .map(data => {
       const cityInfo = CITIES.find(c => c.cityId === data.cityId);
       const healthcareScore = (
-        (data.metrics.physicians || 0) * 0.4 +
-        (data.metrics.hospital_beds || 0) * 0.3 +
-        (data.metrics.healthcare_expenditure || 0) / 1000 * 0.3
+        (data.metrics.physiciansPer1000 || 0) * 0.4 +
+        (data.metrics.hospitalBedsPer1000 || 0) * 0.3 +
+        (data.metrics.healthcareExpenditure || 0) / 1000 * 0.3
       );
       return {
         cityName: cityInfo ? cityInfo.name : data.cityId,
@@ -72,9 +78,9 @@ const InsightsPanel: React.FC = () => {
     .map(data => {
       const cityInfo = CITIES.find(c => c.cityId === data.cityId);
       const envScore = (
-        (data.metrics.renewable_energy || 0) * 0.4 +
-        (100 - (data.metrics.co2_emissions || 0) * 20) * 0.3 +
-        (data.metrics.forest_area || 0) * 0.3
+        (data.metrics.renewableEnergyPercentage || 0) * 0.4 +
+        (100 - (data.metrics.co2EmissionsPerCapita || 0) * 20) * 0.3 +
+        (data.metrics.forestCoveragePercentage || 0) * 0.3
       );
       return {
         cityName: cityInfo ? cityInfo.name : data.cityId,
@@ -87,129 +93,264 @@ const InsightsPanel: React.FC = () => {
   const topEnvironmental = environmentalLeaders.slice(0, 3);
   const bottomEnvironmental = environmentalLeaders.slice(-3).reverse();
 
+  const InsightCard = ({ title, icon, children, color = 'primary' }: {
+    title: string;
+    icon: React.ReactNode;
+    children: React.ReactNode;
+    color?: 'primary' | 'secondary' | 'success' | 'error' | 'warning' | 'info';
+  }) => (
+    <Box
+      sx={{
+        p: 3,
+        background: theme.palette.mode === 'dark' 
+          ? 'linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)'
+          : 'linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.6) 100%)',
+        border: '1px solid',
+        borderColor: theme.palette.mode === 'dark' 
+          ? 'rgba(255,255,255,0.1)' 
+          : 'rgba(0,0,0,0.1)',
+        borderRadius: 3,
+        backdropFilter: 'blur(10px)',
+        transition: 'all 0.3s ease-in-out',
+        '&:hover': {
+          transform: 'translateY(-2px)',
+          boxShadow: theme.palette.mode === 'dark' 
+            ? '0 8px 32px rgba(0,0,0,0.3)' 
+            : '0 8px 32px rgba(0,0,0,0.1)',
+        },
+      }}
+    >
+      <Typography 
+        variant="h6" 
+        sx={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          mb: 2,
+          color: color === 'primary' ? theme.palette.primary.main :
+                 color === 'secondary' ? theme.palette.secondary.main :
+                 color === 'success' ? theme.palette.success.main :
+                 color === 'error' ? theme.palette.error.main :
+                 color === 'warning' ? theme.palette.warning.main :
+                 color === 'info' ? theme.palette.info.main :
+                 theme.palette.primary.main,
+          fontWeight: 600,
+        }}
+      >
+        {icon}
+        <Box component="span" sx={{ ml: 1 }}>
+          {title}
+        </Box>
+      </Typography>
+      {children}
+    </Box>
+  );
+
   return (
-    <Paper elevation={3} sx={{ p: 2 }}>
-      <Typography variant="h6" gutterBottom>
-        Key Insights
+    <Box sx={{ p: 3 }}>
+      <Typography 
+        variant="h5" 
+        gutterBottom 
+        sx={{ 
+          mb: 3, 
+          fontWeight: 700,
+          textAlign: 'center',
+          background: theme.palette.mode === 'dark' 
+            ? 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)'
+            : 'linear-gradient(45deg, #2196F3 0%, #21CBF3 100%)',
+          backgroundClip: 'text',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+        }}
+      >
+        <EmojiEvents sx={{ mr: 1, verticalAlign: 'middle' }} />
+        Key Insights & Rankings
       </Typography>
       
-      <Grid container spacing={2}>
+      <Grid container spacing={3}>
         {/* Top HDI Cities */}
-        <Grid item xs={12} md={6}>
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-              <School sx={{ mr: 1 }} />
-              Top 10 Cities by HDI
-            </Typography>
+        <Grid item xs={12} lg={6}>
+          <InsightCard title="Top 10 Cities by HDI" icon={<School />} color="primary">
             <List dense>
               {topHDICities.map((city, index) => (
-                <ListItem key={city.cityName} sx={{ py: 0.5 }}>
-                  <ListItemIcon sx={{ minWidth: 30 }}>
+                <ListItem 
+                  key={city.cityName} 
+                  sx={{ 
+                    py: 1,
+                    background: index < 3 
+                      ? (theme.palette.mode === 'dark' ? 'rgba(33,150,243,0.1)' : 'rgba(33,150,243,0.05)')
+                      : 'transparent',
+                    borderRadius: 1,
+                    mb: 0.5,
+                  }}
+                >
+                  <ListItemIcon sx={{ minWidth: 40 }}>
                     <Chip 
                       label={index + 1} 
                       size="small" 
                       color={index < 3 ? "primary" : "default"}
+                      sx={{ 
+                        fontWeight: 600,
+                        background: index < 3 
+                          ? 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)'
+                          : undefined,
+                      }}
                     />
                   </ListItemIcon>
                   <ListItemText
-                    primary={city.cityName}
-                    secondary={`${city.state} - HDI: ${city.hdi.toFixed(3)}`}
+                    primary={
+                      <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                        {city.cityName}
+                      </Typography>
+                    }
+                    secondary={
+                      <Typography variant="caption" color="text.secondary">
+                        {city.state} • HDI: {city.hdi.toFixed(3)}
+                      </Typography>
+                    }
                   />
+                  {index < 3 && <Star sx={{ color: '#FFD700', fontSize: 20 }} />}
                 </ListItem>
               ))}
             </List>
-          </Box>
+          </InsightCard>
         </Grid>
 
         {/* Healthcare Leaders */}
-        <Grid item xs={12} md={6}>
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-              <LocalHospital sx={{ mr: 1 }} />
-              Best Healthcare Systems
-            </Typography>
+        <Grid item xs={12} lg={6}>
+          <InsightCard title="Best Healthcare Systems" icon={<LocalHospital />} color="success">
             <List dense>
               {bestHealthcareCities.map((city, index) => (
-                <ListItem key={city.cityName} sx={{ py: 0.5 }}>
-                  <ListItemIcon sx={{ minWidth: 30 }}>
+                <ListItem 
+                  key={city.cityName} 
+                  sx={{ 
+                    py: 1,
+                    background: index < 3 
+                      ? (theme.palette.mode === 'dark' ? 'rgba(76,175,80,0.1)' : 'rgba(76,175,80,0.05)')
+                      : 'transparent',
+                    borderRadius: 1,
+                    mb: 0.5,
+                  }}
+                >
+                  <ListItemIcon sx={{ minWidth: 40 }}>
                     <Chip 
                       label={index + 1} 
                       size="small" 
                       color="success"
+                      sx={{ 
+                        fontWeight: 600,
+                        background: 'linear-gradient(45deg, #4CAF50 0%, #45a049 100%)',
+                      }}
                     />
                   </ListItemIcon>
                   <ListItemText
-                    primary={city.cityName}
-                    secondary={`${city.state} - Score: ${city.score.toFixed(1)}`}
+                    primary={
+                      <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                        {city.cityName}
+                      </Typography>
+                    }
+                    secondary={
+                      <Typography variant="caption" color="text.secondary">
+                        {city.state} • Score: {city.score.toFixed(1)}
+                      </Typography>
+                    }
                   />
+                  {index < 3 && <Visibility sx={{ color: '#4CAF50', fontSize: 20 }} />}
                 </ListItem>
               ))}
             </List>
-          </Box>
+          </InsightCard>
         </Grid>
 
         {/* High Inequality */}
-        <Grid item xs={12} md={6}>
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-              <Warning sx={{ mr: 1 }} />
-              Highest Inequality (Gini)
-            </Typography>
+        <Grid item xs={12} lg={6}>
+          <InsightCard title="Highest Inequality (Gini)" icon={<Warning />} color="error">
             <List dense>
               {highInequalityCities.map((city, index) => (
-                <ListItem key={city.cityName} sx={{ py: 0.5 }}>
-                  <ListItemIcon sx={{ minWidth: 30 }}>
+                <ListItem 
+                  key={city.cityName} 
+                  sx={{ 
+                    py: 1,
+                    background: index < 3 
+                      ? (theme.palette.mode === 'dark' ? 'rgba(244,67,54,0.1)' : 'rgba(244,67,54,0.05)')
+                      : 'transparent',
+                    borderRadius: 1,
+                    mb: 0.5,
+                  }}
+                >
+                  <ListItemIcon sx={{ minWidth: 40 }}>
                     <Chip 
                       label={index + 1} 
                       size="small" 
                       color="error"
+                      sx={{ 
+                        fontWeight: 600,
+                        background: 'linear-gradient(45deg, #f44336 0%, #d32f2f 100%)',
+                      }}
                     />
                   </ListItemIcon>
                   <ListItemText
-                    primary={city.cityName}
-                    secondary={`${city.state} - Gini: ${city.gini.toFixed(3)}`}
+                    primary={
+                      <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                        {city.cityName}
+                      </Typography>
+                    }
+                    secondary={
+                      <Typography variant="caption" color="text.secondary">
+                        {city.state} • Gini: {city.gini.toFixed(3)}
+                      </Typography>
+                    }
                   />
                 </ListItem>
               ))}
             </List>
-          </Box>
+          </InsightCard>
         </Grid>
 
         {/* Environmental Performance */}
-        <Grid item xs={12} md={6}>
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="subtitle1" sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-              <Nature sx={{ mr: 1 }} />
-              Environmental Performance
-            </Typography>
-            <Box sx={{ mb: 1 }}>
-              <Typography variant="caption" color="success.main">Leaders:</Typography>
-              {topEnvironmental.map((city, index) => (
-                <Chip 
-                  key={city.cityName}
-                  label={`${city.cityName} (${city.score.toFixed(0)})`}
-                  size="small"
-                  color="success"
-                  sx={{ mr: 0.5, mb: 0.5 }}
-                />
-              ))}
+        <Grid item xs={12} lg={6}>
+          <InsightCard title="Environmental Performance" icon={<Nature />} color="success">
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="subtitle2" color="success.main" sx={{ fontWeight: 600, mb: 1 }}>
+                🌱 Environmental Leaders:
+              </Typography>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                {topEnvironmental.map((city, index) => (
+                  <Chip 
+                    key={city.cityName}
+                    label={`${city.cityName} (${city.score.toFixed(0)})`}
+                    size="small"
+                    color="success"
+                    sx={{ 
+                      fontWeight: 600,
+                      background: 'linear-gradient(45deg, #4CAF50 0%, #45a049 100%)',
+                    }}
+                  />
+                ))}
+              </Box>
             </Box>
             <Box>
-              <Typography variant="caption" color="error.main">Laggards:</Typography>
-              {bottomEnvironmental.map((city, index) => (
-                <Chip 
-                  key={city.cityName}
-                  label={`${city.cityName} (${city.score.toFixed(0)})`}
-                  size="small"
-                  color="error"
-                  sx={{ mr: 0.5, mb: 0.5 }}
-                />
-              ))}
+              <Typography variant="subtitle2" color="error.main" sx={{ fontWeight: 600, mb: 1 }}>
+                ⚠️ Environmental Laggards:
+              </Typography>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                {bottomEnvironmental.map((city, index) => (
+                  <Chip 
+                    key={city.cityName}
+                    label={`${city.cityName} (${city.score.toFixed(0)})`}
+                    size="small"
+                    color="error"
+                    sx={{ 
+                      fontWeight: 600,
+                      background: 'linear-gradient(45deg, #f44336 0%, #d32f2f 100%)',
+                    }}
+                  />
+                ))}
+              </Box>
             </Box>
-          </Box>
+          </InsightCard>
         </Grid>
       </Grid>
-    </Paper>
+    </Box>
   );
 };
 
