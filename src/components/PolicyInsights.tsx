@@ -22,7 +22,7 @@ import {
   Lightbulb,
   School,
   LocalHospital,
-  Eco,
+  Nature,
   AttachMoney,
   Star,
   Group
@@ -197,7 +197,7 @@ const PolicyInsights: React.FC = () => {
       case 'Healthcare': return <LocalHospital />;
       case 'Education': return <School />;
       case 'Economic': return <AttachMoney />;
-      case 'Environment': return <Eco />;
+      case 'Environment': return <Nature />;
       case 'Infrastructure': return <TrendingUp />;
       case 'Technology': return <Lightbulb />;
       case 'Financial Services': return <AttachMoney />;
